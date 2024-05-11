@@ -42,10 +42,39 @@ struct PredatorDetail: View {
                         .font(.largeTitle)
                     
                     // current location
-                    Map(position: $position) {
-                        
+                    NavigationLink {
+                        Image(predator.image)
+                            .resizable()
+                            .scaledToFit()
+                    } label: {
+                        Map(position: $position){
+                            Annotation(
+                                predator.name,
+                                coordinate: predator.location) {
+                                    Image(systemName: "mappin.and.ellipse")
+                                        .font(.largeTitle)
+                                        .imageScale(.large)
+                                        .symbolEffect(.pulse)
+                                }
+                                .annotationTitles(.hidden)
+                        }
+                            .frame(height: 125)
+                            .clipShape(.rect(cornerRadius: 15))
+                            .overlay(alignment: .trailing) {
+                                Image(systemName: "greaterthan")
+                                    .imageScale(.large)
+                                    .font(.title3)
+                                    .padding(.trailing, 5)
+                            }
+                            .overlay(alignment: .topLeading) {
+                                Text("Current Location")
+                                    .padding([.leading, .bottom], 5)
+                                    .padding(.trailing, 8)
+                                    .background(.black.opacity(0.33))
+                                    .clipShape(.rect(bottomTrailingRadius: 15))
+                            }
+                            .clipShape(.rect(cornerRadius: 15))
                     }
-                        
                     
                     // list of movie
                     Text("Appears in:")
@@ -85,6 +114,7 @@ struct PredatorDetail: View {
               
             }
             .ignoresSafeArea()
+            .toolbarBackground(.automatic)
         }
     }
     
@@ -92,6 +122,8 @@ struct PredatorDetail: View {
 }
 
 #Preview {
-    PredatorDetail(predator: Predators().apexPredators[10], position: .camera(MapCamera(centerCoordinate: Predators().apexPredators[10].location, distance: 30000)))
-        .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
+    NavigationStack {
+        PredatorDetail(predator: Predators().apexPredators[10], position: .camera(MapCamera(centerCoordinate: Predators().apexPredators[10].location, distance: 30000)))
+            .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
+    }
 }
